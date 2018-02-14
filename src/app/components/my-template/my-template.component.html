@@ -4,45 +4,100 @@
 
   <div>
 
-    <div class="form-group row">
+    <div class="form-group row" [ngClass]="{'text-danger': personName.errors?.minlength}">
       <label class="col-2 col-form-label">Nombre</label>
       <div class="col-8">
 
         <input class="form-control"
                type="text"
-               placeholder="Nombre">
+               placeholder="Nombre"
+               required=""
+               minlength="5"
+               name="name"
+               [(ngModel)]="person.name"
+               #personName="ngModel"
+               autocomplete="off">
+
+            
+        <div *ngIf="personName.errors" >
+            <small class="error-message animated fadeIn fast" *ngIf="personName.errors?.minlength && personName.touched"> Mínimo 5 caracteres *</small>
+        </div>
+
       </div>
     </div>
 
-    <div class="form-group row">
+    <div class="form-group row" [ngClass]="{'text-danger': personLastName.errors?.minlength}">
       <label class="col-2 col-form-label">Apellido</label>
       <div class="col-8">
 
         <input class="form-control"
                type="text"
-               placeholder="Apellido">
+               placeholder="Apellido"
+               required=""
+               minlength="5"
+               name="lastName"
+               [(ngModel)]="person.lastName"
+               #personLastName="ngModel"
+               autocomplete="off">
+
+            
+        <div *ngIf="personLastName.errors" >
+            <small class="error-message animated fadeIn fast" *ngIf="personLastName.errors?.minlength && personLastName.touched"> Mínimo 5 caracteres *</small>
+        </div>
+
       </div>
     </div>
 
-    <div class="form-group row">
+    <div class="form-group row" [ngClass]="{'text-danger': (personEmail.errors?.minlength || personEmail.errors?.pattern)}" >
         <label class="col-2 col-form-label">Correo</label>
         <div class="col-8">
 
             <input class="form-control"
                    type="email"
-                   placeholder="Correo electrónico">
+                   placeholder="Correo electrónico"
+                   required=""
+                   name="email"
+                   [(ngModel)]="person.email"
+                   #personEmail="ngModel"
+                   minlength="5"
+                   pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"
+                   autocomplete="off">
+
+            
+            <div *ngIf="personEmail.errors" >
+                <small class="error-message animated fadeIn fast" *ngIf="personEmail.errors?.minlength && personEmail.touched"> Mínimo 5 caracteres *</small>
+                <small class="error-message animated fadeIn fast" *ngIf="personEmail.errors?.pattern && personEmail.touched"> Formato inválido *</small>
+            </div>
+            
         </div>
     </div>
+
+    <div class="form-group row">
+            <label class="col-2 col-form-label">Pais</label>
+            <div class="col-8">
+    
+               <select class="custom-select" [(ngModel)]="person.country" name="country" required="">
+                   <option selected>Seleccione un pais</option>
+                   <option *ngFor="let country of contries" [value]="country.code">{{country.name}}</option> 
+                   
+               </select>
+
+            </div>
+        </div>
 
   </div>
 
   <div class="form-group row">
     <label class="col-2 col-form-label">&nbsp;</label>
     <div class="input-group col-md-8">
-      <button type="submit" class="btn btn-outline-primary">
+      <button type="submit" (click)="show(personLastName)" class="btn btn-outline-primary">
         Guardar
       </button>
     </div>
   </div>
+
+  <pre>
+      {{ person | json }}
+  </pre>
 
 </form>
