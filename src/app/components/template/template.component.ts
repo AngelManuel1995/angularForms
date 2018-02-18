@@ -16,8 +16,29 @@ export class TemplateComponent{
     usuario:Object = {
         nombre:null,
         apellido:null,
-        correo:null
+        correo:null,
+        pais:"Seleccione un pais",
+        genero:'Masculino',
+        acepta:false
     }
+
+    paises:Object[] = [
+        {
+            nombre:"Colombia",
+            codigo:"COL"
+        },
+        {
+            nombre:"Argentina",
+            codigo:"ARG"
+        },
+        {
+            nombre:"Chile",
+            codigo:"CHL"
+        }
+    ]
+
+    generos:Object[] = ['Masculino', 'Femenino', 'Sin definir'];
+     
 
     constructor(){
 

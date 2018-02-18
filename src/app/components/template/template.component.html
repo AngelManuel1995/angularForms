@@ -15,7 +15,7 @@
                minlength="5"
                required=""
                placeholder="Nombre"
-               #nombre="ngModel">
+               #nombre="ngModel" autocomplete="off">
 
             
         <div class="error-message animated fast fadeIn" *ngIf="nombre.errors?.required && nombre.touched">Campo requerido</div>
@@ -37,33 +37,67 @@
                name="apellido"
                [(ngModel)]="usuario.apellido"
                required=""
-               #apellido="ngModel">
+               #apellido="ngModel" autocomplete="off">
 
         <div class="error-message animated fast fadeIn" *ngIf="apellido.errors?.required && apellido.touched">Campo requerido</div>
                
       </div>
     </div>
 
-  </div>
 
-  <div class="form-group row" [ngClass]="{'error-message': (correo.errors?.required || correo.errors?.pattern) && correo.touched }">
-    <label class="col-2 col-form-label">Correo</label>
-    <div class="col-md-8">
+    <div class="form-group row" [ngClass]="{'error-message': (correo.errors?.required || correo.errors?.pattern) && correo.touched }">
+      <label class="col-2 col-form-label">Correo</label>
+      <div class="col-8">
+  
+        <input class="form-control"
+               type="email"
+               placeholder="Correo electrónico"
+               name="correo"
+               [(ngModel)]="usuario.correo"
+               required
+               pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"
+               #correo="ngModel" autocomplete="off">
+        <div class="error-message animated fast fadeIn" *ngIf="correo.errors?.required && correo.touched">Campo requerido</div>
+        <div class="error-message animated fast fadeIn" *ngIf="correo.errors?.pattern && correo.touched">Formato de correo incorrecto</div>
+      </div>
+    </div>
 
-      <input class="form-control"
-             type="email"
-             placeholder="Correo electrónico"
-             name="correo"
-             [(ngModel)]="usuario.correo"
-             required
-             pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"
-             #correo="ngModel">
-      <div class="error-message animated fast fadeIn" *ngIf="correo.errors?.required && correo.touched">Campo requerido</div>
-      <div class="error-message animated fast fadeIn" *ngIf="correo.errors?.pattern && correo.touched">Formato de correo incorrecto</div>
+    <div class="form-group row">
+        <label class="col-2 col-form-label">Pais</label>
+        <div class="col-8">
+
+           <select class="custom-select" [(ngModel)]="usuario.pais" name="pais" required="">
+               <option selected>Seleccione un pais</option>
+               <option *ngFor="let pais of paises" [value]="pais.codigo">{{pais.nombre}}</option> 
+           </select>
+          
+        </div>
+    </div>
+
+    <div class="form-group row">
+      <label class="col-2 col-form-label">Género</label>
+      <div class="col-8">
+        <div *ngFor="let genero of generos" class="custom-control custom-radio custom-control-inline">
+          <input type="radio" [id]="genero"  name="genero" class="custom-control-input" required="">
+          <label class="custom-control-label" [for]="genero">{{ genero }}</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-2 col-form-label">Acepta</label>
+      
+        <div class="form-check form-check-inline col-8">
+          <input [(ngModel)]="usuario.acepta" 
+                 name="acepta" 
+                 class="form-check-input" 
+                 type="checkbox" 
+                 id="inlineCheckbox1"
+                 required="">
+          <label class="form-check-label" for="inlineCheckbox1">Acepta los términos y condiciones</label>
+        </div>
     </div>
   </div>
-
-
 
   <div class="form-group row">
     <label class="col-2 col-form-label">&nbsp;</label>
@@ -73,5 +107,9 @@
       </button>
     </div>
   </div>
+
+  <pre>
+    {{ usuario | json }}
+  </pre>
 
 </form>
