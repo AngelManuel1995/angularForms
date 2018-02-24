@@ -4,29 +4,43 @@
 
   <div>
 
-    <div class="form-group row">
+    <div class="form-group row" [ngClass]="{'has-danger': !forma.get('nombre').valid}" >
       <label class="col-2 col-form-label">Nombre</label>
       <div class="col-8">
 
         <input class="form-control"
                type="text"
                placeholder="Nombre"
-               formControlName="nombre">
+							 formControlName="nombre">
+				<div *ngIf="forma.controls['nombre'].errors?.required" class="fadeIn animated fast form-control-feedback">
+					Campo requerido
+				</div>
+				<div *ngIf="forma.controls['nombre'].errors?.minlength" class="fadeIn animated fast form-control-feedback">
+					Mínimo {{ forma.controls['nombre'].errors?.minlength.requiredLength }} caracteres
+				</div>
       </div>
     </div>
 
-    <div class="form-group row">
+    <div class="form-group row" [ngClass]="{'has-danger': !forma.get('apellido').valid}">
       <label class="col-2 col-form-label">Apellido</label>
       <div class="col-8">
 
         <input class="form-control"
                type="text"
                placeholder="Apellido"
-               formControlName="apellido">
+							 formControlName="apellido">
+
+				<div *ngIf="forma.controls['apellido'].errors?.required" class="fadeIn animated fast form-control-feedback">
+					Campo requerido
+				</div>
+				<div *ngIf="forma.controls['apellido'].errors?.minlength" class="fadeIn animated fast form-control-feedback">
+					Mínimo {{ forma.controls['apellido'].errors?.minlength.requiredLength }} caracteres
+				</div>
+
       </div>
     </div>
 
-    <div class="form-group row">
+    <div class="form-group row" [ngClass]="{'has-danger': !forma.get('correo').valid}">
 			<label class="col-2 col-form-label">Correo</label>
 			<div class="col-8">
 
@@ -34,6 +48,14 @@
 								type="email"
 								placeholder="Correo electrónico"
 								formControlName="correo">
+
+				<div *ngIf="forma.controls['correo'].errors?.required" class="fadeIn animated fast form-control-feedback">
+						Campo requerido
+				</div>
+
+				<div *ngIf="forma.controls['correo'].errors?.pattern" class="fadeIn animated fast form-control-feedback">
+						Formato invalido
+				</div>
 			</div>
     </div>
 
