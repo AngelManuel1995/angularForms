@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
 
 @Component({
     selector:'app-data',
@@ -8,7 +8,6 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 export class DataComponent{
 
-
     usuario: Object = {
        
         nombrecompleto:{
@@ -16,34 +15,47 @@ export class DataComponent{
             apellido:'Góez Giraldo'
         },
 
-        correo:'angelmanuel.goez@gmail.com'
+        correo:'angelmanuel.goez@gmail.com',
+        // pasatiempos:['Correr', 'Programar', 'Cine']
     }
     
     forma:FormGroup;
     constructor(){
 
         this.forma = new FormGroup({
-            nombrecompleto:new FormGroup({
-                                            nombre: new FormControl('', [
-                                                                            Validators.required,
-                                                                            Validators.minLength(5)
-                                                                        ]),
-                                            apellido: new FormControl('', [
-                                                                             Validators.required,
-                                                                             Validators.minLength(5)
-                                                                          ])
+            'nombrecompleto':new FormGroup({
+                'nombre': new FormControl('', [
+                                                Validators.required,
+                                                Validators.minLength(5)
+                                            ]),
+                'apellido': new FormControl('', [
+                                                    Validators.required,
+                                                    Validators.minLength(5)
+                                                ])
             }),
-            correo: new FormControl('', [ 
+            'correo': new FormControl('', [ 
                                             Validators.required, 
                                             Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$') 
-                                        ])
+                                        ]),
+            'pasatiempos':new FormArray([
+                new FormControl('', [Validators.required, Validators.maxLength(5)])
+            ])
         });
     
-        this.forma.setValue(this.usuario);
+        //this.forma.setValue(this.usuario);
     }
+
+    agregarPasatiempo(){
+        
+        (<FormArray>this.forma.controls['pasatiempos']).push(
+            new FormControl('', [Validators.required, Validators.minLength(5)] )
+        )
+    }
+
 
     guardarCambios(){
         console.log(this.forma);
+        console.log(this.forma.value);
         this.forma.reset({
             nombrecompleto:{
                 nombre:'',
