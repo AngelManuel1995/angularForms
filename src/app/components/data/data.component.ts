@@ -10,11 +10,13 @@ export class DataComponent{
 
 
     usuario: Object = {
+       
         nombrecompleto:{
-            nombre:'',
-            apellido:''
+            nombre:'Angel Manuel',
+            apellido:'Góez Giraldo'
         },
-        correo:''
+
+        correo:'angelmanuel.goez@gmail.com'
     }
     
     forma:FormGroup;
@@ -36,10 +38,19 @@ export class DataComponent{
                                             Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$') 
                                         ])
         });
+    
+        this.forma.setValue(this.usuario);
     }
 
     guardarCambios(){
         console.log(this.forma);
+        this.forma.reset({
+            nombrecompleto:{
+                nombre:'',
+                apellido:''
+            },
+            correo:''
+        });
     }
 
 }
@@ -50,4 +61,14 @@ export class DataComponent{
  * 
  * new FormControl: es la clase mediante la cual instanciamos los elementos de los formularios.
  * y resive como parámetro: 1- Valor por defecto, 2- Reglas de validación, y 3- reglas de validacion asincronicas
+ * 
+ * Para setteat valores por defecto lo que podemos hacer es lo siguiente:
+ *      Podemos settearlos en en primer parámetro que resive la función para crear control FromContro
+ *      Ejemplo: nombre:FormCotrol = new FormControl(usuario.nombrecompleto.nombre,validaciones,validacionesAsincrónicas);
+ *      También podemos hacer haciendo uso del método setValue the objeto FormGroup; pero tenemos que tener en cuenta que la 
+ *      estructura del objeto debe ser igual a la estructua que hicimos en el formulario.
+ * 
+ * Ahora si queremos es reseteat la información que tiene cargada en formulario, lo podemos hacer con la método de la clase
+ * FormGroup reset(), que le enviaremos en objeto de la misma forma, del objeto original pero esta vez se lo enviaremos con 
+ * los valores de string vacios para que sea esto lo que pase al formulario que quedará con los valores por defecto.
  */
