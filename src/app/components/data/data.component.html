@@ -1,65 +1,63 @@
 <h4>Formularios <small>Aproximación por data</small></h4>
 <hr>
-<form [formGroup]="forma" (ngSubmit)="guardarCambios()" novalidate="novalidate">
-
-  <div>
-
-    <div class="form-group row" [ngClass]="{'has-danger': !forma.get('nombre').valid}" >
+<form [formGroup]="forma" (ngSubmit)="guardarCambios()" class="">
+<!--[ngClass]="{'has-danger': !forma.get('nombre').valid}"-->
+  <div formGroupName="nombrecompleto">
+    <div class="form-group row fadeIn animated fast" [ngClass]="{'has-danger':!forma.get('nombrecompleto.nombre').valid}" >
       <label class="col-2 col-form-label">Nombre</label>
       <div class="col-8">
 
         <input class="form-control"
                type="text"
                placeholder="Nombre"
-							 formControlName="nombre">
-				<div *ngIf="forma.controls['nombre'].errors?.required" class="fadeIn animated fast form-control-feedback">
+							 formControlName="nombre"><!-- Para conectar este atributo con el que creamos en el componente .ts -->
+				<div *ngIf="forma.controls['nombrecompleto'].controls['nombre'].errors?.required" class="fadeIn animated fast form-control-feedback">
 					Campo requerido
 				</div>
-				<div *ngIf="forma.controls['nombre'].errors?.minlength" class="fadeIn animated fast form-control-feedback">
-					Mínimo {{ forma.controls['nombre'].errors?.minlength.requiredLength }} caracteres
+				<div *ngIf="forma.controls['nombrecompleto'].controls['nombre'].errors?.minlength" class="fadeIn animated fast form-control-feedback">
+					Mínimo {{ forma.controls['nombrecompleto'].controls['nombre'].errors?.minlength.requiredLength }} caracteres
 				</div>
       </div>
     </div>
-
-    <div class="form-group row" [ngClass]="{'has-danger': !forma.get('apellido').valid}">
+		<!--[ngClass]="{'has-danger': !forma.get('apellido').valid}"-->
+    <div class="form-group row" [ngClass]="{'has-danger':!forma.get('nombrecompleto.apellido').valid}" >
       <label class="col-2 col-form-label">Apellido</label>
       <div class="col-8">
 
         <input class="form-control"
                type="text"
                placeholder="Apellido"
-							 formControlName="apellido">
-
-				<div *ngIf="forma.controls['apellido'].errors?.required" class="fadeIn animated fast form-control-feedback">
+							 formControlName="apellido"><!-- Para conectar este atributo con el que creamos en el componente .ts -->
+				
+				<div *ngIf="forma.controls['nombrecompleto'].controls['apellido'].errors?.required" class="fadeIn animated fast form-control-feedback">
 					Campo requerido
 				</div>
-				<div *ngIf="forma.controls['apellido'].errors?.minlength" class="fadeIn animated fast form-control-feedback">
-					Mínimo {{ forma.controls['apellido'].errors?.minlength.requiredLength }} caracteres
+				<div *ngIf="forma.get('nombrecompleto.apellido').errors?.minlength" class="fadeIn animated fast form-control-feedback">
+					Mínimo {{ forma.controls['nombrecompleto'].controls['apellido'].errors?.minlength.requiredLength }} caracteres
 				</div>
 
       </div>
     </div>
-
-    <div class="form-group row" [ngClass]="{'has-danger': !forma.get('correo').valid}">
-			<label class="col-2 col-form-label">Correo</label>
-			<div class="col-8">
-
-				<input class="form-control"
-								type="email"
-								placeholder="Correo electrónico"
-								formControlName="correo">
-
-				<div *ngIf="forma.controls['correo'].errors?.required" class="fadeIn animated fast form-control-feedback">
-						Campo requerido
-				</div>
-
-				<div *ngIf="forma.controls['correo'].errors?.pattern" class="fadeIn animated fast form-control-feedback">
-						Formato invalido
-				</div>
-			</div>
-    </div>
-
 </div>
+	<!---->
+<div class="form-group row" [ngClass]="{'has-danger': !forma.get('correo').valid}" >
+		<label class="col-2 col-form-label">Correo</label>
+		<div class="col-8">
+
+			<input class="form-control"
+							type="email"
+							placeholder="Correo electrónico"
+							formControlName="correo"><!-- Para conectar este atributo con el que creamos en el componente .ts -->
+
+			<div *ngIf="forma.controls['correo'].errors?.required" class="fadeIn animated fast form-control-feedback">
+					Campo requerido
+			</div>
+
+			<div *ngIf="forma.controls['correo'].errors?.pattern" class="fadeIn animated fast form-control-feedback">
+					Formato invalido
+			</div> 
+		</div>
+	</div>
 
   <div class="form-group row">
     <label class="col-2 col-form-label">&nbsp;</label>
@@ -73,3 +71,38 @@
 	{{ forma.valid }}
 
 </form>
+<!--
+	Documentación:
+	Hay que tener en cuenta que para porder hacer la validación de los formularios de esta forma 
+	debemos enlazar los inputs que creamos con los objetos que creamos en el component.ts
+	
+	 FormGroup: Es la forma en la que le indicamos a angular que vamos a trabar con un formulario
+							y que lo vamos a validar por data y lo que debemos hacer es conectar el formulario
+							con el objeto que creamos en el .ts con formGroup="nombre", nombre:a sí se debe 
+							llamar el objeto que creamos en el componente y formGroup="nombre" lo pondremos
+							en la etiqueta <form formGroup = "nombre">
+							La foma en la que creamos en el objeto en la parte del componente del .ts es de la 
+							siguiente forma: crearemos el un objeto principar que contendrá los demas controles
+							o inputs: forma:FormGroup = new FormGroup({});
+							En el objeto que le enviaremos le enviamos los controles o inputs de los que estará 
+							compuesto el formlario: forma:FormGroup = new FormGroup( {
+								nombre: new FormControl('Valor por defecto',Validaciones, Validaciones asincrónicas);
+							});
+							El valor por defecto es el valor que saldrá cuando carguemos el formulario por si 
+							quisieramos cargar información de un usuario para que el la modifique.
+							En las validaciones lo haremos con el módulo de Validators de la siguiente manera:
+							Validator.reglaDeValidacion
+							ejemplo:
+								forma:FormGroup = new FormGroup({
+									nombre: new FormControl('', Validators.minLength(5));
+								});
+
+							Este nombre tambien lo tenemos que anclar con un input en el formulario y lo haremos 
+							con la siguiente linea de código en input que queremos anclar:
+							FormControlName = "nombre" este nombre debe ser igual en el .ts
+
+
+	 , FormControl, Validators 
+	
+
+-->
