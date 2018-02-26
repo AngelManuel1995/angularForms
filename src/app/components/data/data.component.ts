@@ -38,7 +38,7 @@ export class DataComponent{
                                             Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$') 
                                         ]),
             'pasatiempos':new FormArray([
-                new FormControl('', [Validators.required, Validators.maxLength(5)])
+                new FormControl('', [Validators.required, Validators.minLength(5), this.noPaja])
             ])
         });
     
@@ -48,23 +48,36 @@ export class DataComponent{
     agregarPasatiempo(){
         
         (<FormArray>this.forma.controls['pasatiempos']).push(
-            new FormControl('', [Validators.required, Validators.minLength(5)] )
+            new FormControl('', [Validators.required, Validators.minLength(5), this.noPaja] )
         )
     }
 
+    //Validaciones
+    noPaja( control:FormControl):{ [s:string]:boolean }{
+        
+        if( control.value === "pajaso" ){
+            return {
+                nopaja:true
+            }
+        }
+
+        return null;
+
+    }
 
     guardarCambios(){
         console.log(this.forma);
         console.log(this.forma.value);
-        this.forma.reset({
-            nombrecompleto:{
-                nombre:'',
-                apellido:''
-            },
-            correo:''
-        });
-    }
+    //     this.forma.reset({
+    //         nombrecompleto:{
+    //             nombre:'',
+    //             apellido:''
+    //         },
+    //         correo:''
+    //     });
+    // }
 
+    }
 }
 
 /**
@@ -84,3 +97,11 @@ export class DataComponent{
  * FormGroup reset(), que le enviaremos en objeto de la misma forma, del objeto original pero esta vez se lo enviaremos con 
  * los valores de string vacios para que sea esto lo que pase al formulario que quedará con los valores por defecto.
  */
+
+ /**
+  * Validaciones personalizadas
+  * Las validaciones peronalizadas con validacione que haremos como una función que será llamada como sugundo parámetro 
+  * cuando instanciemos un objeto de la clase FormControl (si tenemos más de una validación debemos pasar un arreglo )
+  * 'nombre': new FormControl('Valor por defecto', [Validators.required, this.miValidacionPersonalizada], 'Validaciones asíncronas')
+  *
+  */
