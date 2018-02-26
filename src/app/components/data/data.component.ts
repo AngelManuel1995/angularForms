@@ -39,10 +39,14 @@ export class DataComponent{
                                         ]),
             'pasatiempos':new FormArray([
                 new FormControl('', [Validators.required, Validators.minLength(5), this.noPaja])
-            ])
+            ]),
+            'password': new FormControl('', [Validators.required]),
+            'confirmPassword': new FormControl('')
         });
     
-        //this.forma.setValue(this.usuario);
+				//this.forma.setValue(this.usuario);
+				this.forma.controls['confirmPassword'].setValidators([Validators.required, this.noIguales.bind(this.forma)]);
+
     }
 
     agregarPasatiempo(){
@@ -52,18 +56,37 @@ export class DataComponent{
         )
     }
 
-    //Validaciones
+		//Validaciones
+		//Las validaciones se encuentran en un contexto diferente por lo que debemos usar la función bind(), 
+		//para definirle el alcance de la forma
     noPaja( control:FormControl):{ [s:string]:boolean }{
-        
         if( control.value === "pajaso" ){
             return {
                 nopaja:true
             }
         }
-
         return null;
-
     }
+
+    noIguales( control:FormControl ):{[s:string]:boolean}{
+			let forma:any = this;
+			if( control.value !== forma.controls['password'].value ){
+				return {
+					noiguales:true
+				}
+			}	
+			return null;		
+		}
+
+		noIguales1( control:FormControl ):{[s:string]:boolean}{
+			let forma:any = this;
+			if( control.value !== forma.controls['confirmPassword'].value ){
+				return {
+					noiguales:true
+				}
+			}	
+			return null;		
+		}
 
     guardarCambios(){
         console.log(this.forma);

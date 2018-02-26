@@ -60,6 +60,42 @@
 </div>
 
 <div class="form-group row">
+		<label class="col-2 col-form-label">Contraseña</label>
+		<div class="col-8">
+
+			<input class="form-control"
+							type="password"
+							placeholder="Ingrese su password"
+							formControlName="password"><!-- Para conectar este atributo con el que creamos en el componente .ts -->
+
+			<!--<div *ngIf="forma.controls['correo'].errors?.required" class="fadeIn animated fast form-control-feedback">
+					Campo requerido
+			</div>
+			<div *ngIf="forma.controls['correo'].errors?.pattern" class="fadeIn animated fast form-control-feedback">
+					Formato invalido
+			</div> -->
+	</div>
+</div>
+
+<div class="form-group row">
+		<label class="col-2 col-form-label">Confirmación </label>
+		<div class="col-8">
+
+			<input class="form-control"
+							type="password"
+							placeholder="Confirme su password"
+							formControlName="confirmPassword"><!-- Para conectar este atributo con el que creamos en el componente .ts -->
+
+			<!--<div *ngIf="forma.controls['correo'].errors?.required" class="fadeIn animated fast form-control-feedback">
+					Campo requerido
+			</div>
+			<div *ngIf="forma.controls['correo'].errors?.pattern" class="fadeIn animated fast form-control-feedback">
+					Formato invalido
+			</div> -->
+	</div>
+</div>
+
+<div class="form-group row">
 	<label class="col-2 col-form-label">Pasatiempos</label>
 	<div class="col-8" formArrayName="pasatiempos">
 		<input  *ngFor="let pasatiempo of forma.controls['pasatiempos'].controls; let i = index"
