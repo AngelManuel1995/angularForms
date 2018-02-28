@@ -48,6 +48,15 @@ export class DataComponent{
 				//this.forma.setValue(this.usuario);
 				this.forma.controls['confirmPassword'].setValidators([Validators.required, this.noIguales.bind(this.forma)]);
 
+				this.forma.controls['username'].valueChanges
+						.subscribe(data => {
+							console.log(data)
+						})
+				
+				this.forma.controls['username'].statusChanges
+						.subscribe( data => {
+							console.log(data);
+						})
 		}
 
 		agregarPasatiempo(){
