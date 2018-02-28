@@ -1,106 +1,120 @@
 import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
-
+import { Observable } from "rxjs/Rx";
 @Component({
-    selector:'app-data',
-    templateUrl:'./data.component.html'
+		selector:'app-data',
+		templateUrl:'./data.component.html'
 })
 
 export class DataComponent{
 
-    usuario: Object = {
-       
-        nombrecompleto:{
-            nombre:'Angel Manuel',
-            apellido:'Góez Giraldo'
-        },
+		usuario: Object = {
+			 
+				nombrecompleto:{
+						nombre:'Angel Manuel',
+						apellido:'Góez Giraldo'
+				},
 
-        correo:'angelmanuel.goez@gmail.com',
-        // pasatiempos:['Correr', 'Programar', 'Cine']
-    }
-    
-    forma:FormGroup;
-    constructor(){
+				correo:'angelmanuel.goez@gmail.com',
+				// pasatiempos:['Correr', 'Programar', 'Cine']
+		}
+		
+		forma:FormGroup;
+		constructor(){
 
-        this.forma = new FormGroup({
-            'nombrecompleto':new FormGroup({
-                'nombre': new FormControl('', [
-                                                Validators.required,
-                                                Validators.minLength(5)
-                                            ]),
-                'apellido': new FormControl('', [
-                                                    Validators.required,
-                                                    Validators.minLength(5)
-                                                ])
-            }),
-            'correo': new FormControl('', [ 
-                                            Validators.required, 
-                                            Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$') 
-                                        ]),
-            'pasatiempos':new FormArray([
-                new FormControl('', [Validators.required, Validators.minLength(5), this.noPaja])
-            ]),
-            'password': new FormControl('', [Validators.required]),
-            'confirmPassword': new FormControl('')
-        });
-    
+				this.forma = new FormGroup({
+						'nombrecompleto':new FormGroup({
+								'nombre': new FormControl('', [
+																								Validators.required,
+																								Validators.minLength(5)
+																						]),
+								'apellido': new FormControl('', [
+																										Validators.required,
+																										Validators.minLength(5)
+																								])
+						}),
+						'correo': new FormControl('', [ 
+																						Validators.required, 
+																						Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$') 
+																				]),
+						'pasatiempos':new FormArray([
+								new FormControl('', [Validators.required, Validators.minLength(5), this.noPaja])
+						]),
+						'username': new FormControl('', Validators.required, this.existeUsuario),
+						'password': new FormControl('', [Validators.required]),
+						'confirmPassword': new FormControl('')
+				});
+		
 				//this.forma.setValue(this.usuario);
 				this.forma.controls['confirmPassword'].setValidators([Validators.required, this.noIguales.bind(this.forma)]);
 
-    }
+		}
 
-    agregarPasatiempo(){
-        
-        (<FormArray>this.forma.controls['pasatiempos']).push(
-            new FormControl('', [Validators.required, Validators.minLength(5), this.noPaja] )
-        )
-    }
+		agregarPasatiempo(){
+				
+				(<FormArray>this.forma.controls['pasatiempos']).push(
+						new FormControl('', [Validators.required, Validators.minLength(5), this.noPaja] )
+				)
+		}
 
 		//Validaciones
 		//Las validaciones se encuentran en un contexto diferente por lo que debemos usar la función bind(), 
 		//para definirle el alcance de la forma
-    noPaja( control:FormControl):{ [s:string]:boolean }{
-        if( control.value === "pajaso" ){
-            return {
-                nopaja:true
-            }
-        }
-        return null;
-    }
-
-    noIguales( control:FormControl ):{[s:string]:boolean}{
-			let forma:any = this;
-			if( control.value !== forma.controls['password'].value ){
-				return {
-					noiguales:true
+		noPaja( control:FormControl):{ [s:string]:boolean }{
+				if( control.value === "pajaso" ){
+						return {
+								nopaja:true
+						}
 				}
-			}	
-			return null;		
+				return null;
+		}
+
+		noIguales( control:FormControl ):{[s:string]:boolean}{
+				let forma:any = this;
+				if( control.value !== forma.controls['password'].value ){
+						return {
+								noiguales:true
+						}
+				}	
+				return null;		
 		}
 
 		noIguales1( control:FormControl ):{[s:string]:boolean}{
-			let forma:any = this;
-			if( control.value !== forma.controls['confirmPassword'].value ){
-				return {
-					noiguales:true
-				}
-			}	
-			return null;		
+				let forma:any = this;
+				if( control.value !== forma.controls['confirmPassword'].value ){
+						return {
+								noiguales:true
+						}
+				}	
+				return null;		
 		}
 
-    guardarCambios(){
-        console.log(this.forma);
-        console.log(this.forma.value);
-    //     this.forma.reset({
-    //         nombrecompleto:{
-    //             nombre:'',
-    //             apellido:''
-    //         },
-    //         correo:''
-    //     });
-    // }
+		existeUsuario( control:FormControl ):Promise<any> | Observable<any>{
+				let promesa = new Promise ( ( resolve, reject ) =>{
+					setTimeout( () => {
+						if( control.value === "pache"){
+							resolve({existeusuaio: true});
+						}else{
+							resolve(null);
+						}
+					},3000)
+				});
+				return promesa;
+		}
 
-    }
+		guardarCambios(){
+				console.log(this.forma);
+				console.log(this.forma.value);
+		//     this.forma.reset({
+		//         nombrecompleto:{
+		//             nombre:'',
+		//             apellido:''
+		//         },
+		//         correo:''
+		//     });
+		// }
+
+		}
 }
 
 /**
@@ -122,9 +136,9 @@ export class DataComponent{
  */
 
  /**
-  * Validaciones personalizadas
-  * Las validaciones peronalizadas con validacione que haremos como una función que será llamada como sugundo parámetro 
-  * cuando instanciemos un objeto de la clase FormControl (si tenemos más de una validación debemos pasar un arreglo )
-  * 'nombre': new FormControl('Valor por defecto', [Validators.required, this.miValidacionPersonalizada], 'Validaciones asíncronas')
-  *
-  */
+	* Validaciones personalizadas
+	* Las validaciones peronalizadas con validacione que haremos como una función que será llamada como sugundo parámetro 
+	* cuando instanciemos un objeto de la clase FormControl (si tenemos más de una validación debemos pasar un arreglo )
+	* 'nombre': new FormControl('Valor por defecto', [Validators.required, this.miValidacionPersonalizada], 'Validaciones asíncronas')
+	*
+	*/
